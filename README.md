@@ -1,34 +1,70 @@
 # intel-one-api-hackathon
-Tkinter GUI:
+import tkinter as tk
+from tkinter.ttk import Label, Button
+import webbrowser
+from openvino.text_detection import TextDetector  # Intel's Text Detection API
+from openvino.image_processing import ImageProcessor  # Intel's Image Processing API
 
-Tkinter is a standard GUI (Graphical User Interface) library for Python.
-The code sets up a simple GUI application using Tkinter to create the AI-based IT Training System interface.
-ITTrainingSystem Class:
+class ITTrainingSystem:
+    def __init__(self, master):
+        self.master = master
+        master.title("AI-based IT Training System")
+        master.geometry("400x300")
+        master.resizable(False, False)
 
-The ITTrainingSystem class represents the main functionality of the AI-based IT Training System.
-It initializes the GUI elements and handles user interactions.
-Text Detection API:
+        self.label = Label(master, text="Welcome to AI-based IT Training System")
+        self.label.pack(ipadx=10, ipady=10)
 
-The TextDetector class from the OpenVINO toolkit is imported for text detection purposes. However, in the provided code, text detection functionality is not implemented.
-Image Processing API:
+        self.yes_button = Button(master, text="Yes", command=self.start_training)
+        self.yes_button.pack(ipadx=10, ipady=5)
 
-The ImageProcessor class from the OpenVINO toolkit is imported for image processing tasks. Similar to text detection, image processing is not utilized in the provided code.
-Initialization and Configuration:
+        self.no_button = Button(master, text="No", command=self.end_training)
+        self.no_button.pack(ipadx=10, ipady=5)
 
-The __init__ method initializes the GUI window, sets its title, size, and disables resizing.
-A welcome message is displayed using a Label widget.
-Two buttons, "Yes" and "No," are provided to start or end the training session, respectively.
-Training Start and End:
+    def start_training(self):
+        self.label.config(text="What programming languages are you familiar with?")
+        self.beginner_button = Button(self.master, text="Python", command=lambda: self.provide_links('beginner', 'Python'))
+        self.beginner_button.pack(ipadx=10, ipady=5)
 
-When the user clicks the "Yes" button, the start_training method is called.
-It updates the label to prompt the user to select programming languages.
-Three buttons are created dynamically for the user to choose their proficiency level in Python, JavaScript, or Java.
-Provide Links:
+        self.intermediate_button = Button(self.master, text="JavaScript", command=lambda: self.provide_links('intermediate', 'JavaScript'))
+        self.intermediate_button.pack(ipadx=10, ipady=5)
 
-When the user clicks one of the language buttons, the provide_links method is called.
-It checks the selected proficiency level and language against a predefined dictionary of learning links.
-If a corresponding link is found, it updates the label with the learning resource link and opens it in the default web browser using webbrowser.open_new_tab().
-End Training Session:
+        self.professional_button = Button(self.master, text="Java", command=lambda: self.provide_links('professional', 'Java'))
+        self.professional_button.pack(ipadx=10, ipady=5)
 
-If the user clicks the "No" button, the end_training method is called, displaying a farewell message.
-The Intel packages, Text Detection API, and Image Processing API, are imported from the OpenVINO toolkit. However, in the provided code, these APIs are not utilized for any specific tasks related to text detection or image processing. They are included for potential future expansion or integration with additional features.
+    def end_training(self):
+        self.label.config(text="Thank you for using AI-based IT Training System")
+
+    def provide_links(self, level, language):
+        learning_links = {
+            'beginner': {
+                'Python': 'https://www.python.org/doc/',
+                'JavaScript': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+                'Java': 'https://docs.oracle.com/en/java/',
+            },
+            'intermediate': {
+                'Python': 'https://realpython.com/',
+                'JavaScript': 'https://www.w3schools.com/js/',
+                'Java': 'https://www.tutorialspoint.com/java/index.htm',
+            },
+            'professional': {
+                'Python': 'https://docs.python.org/3/',
+                'JavaScript': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+                'Java': 'https://docs.oracle.com/en/java/',
+            }
+        }
+
+        if level in learning_links and language in learning_links[level]:
+            link = learning_links[level][language]
+            self.label.config(text=f"You can start learning {language} at: {link}")
+            webbrowser.open_new_tab(link)
+        else:
+            self.label.config(text="No learning links available for the selected level and language")
+
+def run_training_system():
+    root = tk.Tk()
+    it_training_system = ITTrainingSystem(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    run_training_system()
